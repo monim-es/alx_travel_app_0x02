@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Booking, Payment
 from .serializers import PaymentSerializer
+from .tasks import send_booking_confirmation_email  # Add this import at the top
+
 
 
 class ListingViewSet(viewsets.ModelViewSet):
@@ -18,6 +20,16 @@ class ListingViewSet(viewsets.ModelViewSet):
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
+
+    def perform_create(self, serializer):
+        booking = serializer.save()
+
+        # 🔁 Send email to test address (adjust later if guest email is added to model)
+        send_booking_confirmation_email.delay(
+            email="test@example.com",
+            full_name=booking.guest_name,
+            destination=booking.listing.title
+        )
 
 
 class InitiatePaymentView(APIView):
@@ -81,3 +93,9 @@ class VerifyPaymentView(APIView):
         payment.save()
 
         return Response({'status': payment.status})
+
+
+
+
+
+

@@ -154,3 +154,12 @@ DATABASES = {
         'PORT': env("DB_PORT"),
     }
 }
+
+# settings.py
+CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+# For dev: send emails to console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@travelapp.com'

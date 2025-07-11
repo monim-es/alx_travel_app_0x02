@@ -12,6 +12,7 @@ class Booking(models.Model):
     guest_name = models.CharField(max_length=100)
     check_in = models.DateField()
     check_out = models.DateField()
+    # email = models.EmailField(max_length=254)
 
 class Review(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
